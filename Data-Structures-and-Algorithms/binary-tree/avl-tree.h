@@ -352,8 +352,52 @@ private:
 				}
 			}
 		}
-		
 		return true;
+	}
+
+	virtual bool del_l(tree_data_t** parent, const tree_key_t& key, tree_data_t& tree_data_t, bool &lower)
+	{
+		return true;
+	}
+
+	virtual bool del_r(tree_data_t** parent, const tree_key_t& key, tree_data_t& tree_data_t, bool &lower)
+	{
+		return true;
+	}
+
+	virtual bool del(tree_node_t** node, const tree_key_t& key, tree_data_t &data){
+		// 根节点为空
+		if (!*root)
+		{
+			return false;
+		}
+
+		// 删除根节点的值
+		if ((*node)->key == key)
+		{
+			tree_node_t *tmp = nullptr;
+			base_tree_t::copy(std::move((*root)->data, data));
+
+			// TODO:删除根节点
+			delete *root;
+			*root = nullptr;
+
+			return true;
+		}
+		else if (key < (*node)->key && (*node)->lchild)
+		{
+			bool lower = false;
+			return del_l(node, key, data, lower);
+		}
+		else if (key > (*node)->key && (*node)->rchild)
+		{
+			bool lower = false;
+			return del_r(node, key, data, lower);
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 private:
